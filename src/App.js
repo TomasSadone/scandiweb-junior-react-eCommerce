@@ -1,25 +1,39 @@
-import logo from './logo.svg';
-import './App.css';
+// import React, { useEffect, useState } from 'react'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+// const [data, setData] = useState({});
+// useEffect(() => {
+//       fetch(
+//         'http://localhost:4000/',{
+//             method: 'POST',
+//             headers: {"Content-Type": "application/json"},
+//             body: JSON.stringify({
+//                 query:`
+//                 query {
+//                     categories{
+//                         name
+//                         products{
+//                         name
+//                     }
+//                 }
+//             }
+//             `
+//         })
+//   })
+//     .then(response => response.json())
+//     .then((data => setData(data)));
+// }, [])
+
+// console.log(data.categories)
+import React, { Component } from 'react'
+import Navbar from './components/Navbar'
+
+export default class App extends Component {
+  render() {
+    return (
+      <>
+        <Navbar/>
+      </>
+    )
+  }
 }
 
-export default App;

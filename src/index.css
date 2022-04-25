@@ -1,13 +1,70 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+:root{
+    --c-text: #1D1F22;
+    --c-green: #5ECE7B;
+    --font-weight-regular: 400;
+    --font-weight-medium: 500;
+    --font-weight-semi-bold: 600;
+    --font-weight-bold: 700;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+body{
+    margin: 0;
+    color: var(--c-text);
+    font-family: 'Raleway', sans-serif;
+    font-weight: var(--font-weight-regular);
+}
+
+.container{
+    margin: 0 auto;
+    width: 86%;
+}
+
+.btn__navbar{
+    background: none;
+    color: inherit;
+    border: none;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+    outline: inherit;
+    padding: 0 1rem 0.3125rem 1rem;
+}
+.btn__navbar:focus{
+    border-bottom: 2px solid var(--c-green);
+    color: var(--c-green);
+    font-weight: var(--font-weight-semi-bold);
+    outline: none;
+}
+.btn__navbar:hover{
+    cursor: pointer;
+}
+
+header{
+    box-shadow:0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+#logo{
+    height: 41px;
+    width: 41px;
+    display: block;
+    margin: 0 auto;
+}
+/* REVISAR ALTURA NAVBAR */
+.navbar{
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    /* min-height: 5rem; */
+    min-height: 9.5vh;
+    /* min-height: 5.3vh; esta linea seria respetando
+    la vh, usar si 5rem queda muy alto */
+    /* border: 2px solid green; */
+}
+
+.navbar *{
+    min-height: 100%;
+}
+
+#divisaycarro{
+    display: flex;
+    justify-content: end;
 }
