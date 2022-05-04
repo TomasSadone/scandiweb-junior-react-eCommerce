@@ -1,0 +1,14 @@
+:root {
+    --c-text: #1d1f22;
+    --c-green: #5ece7b;
+    --font-weight-light: 300;
+    --font-weight-regular: 400;
+    --font-weight-medium: 500;
+    --font-weight-semi-bold: 600;
+    --font-weight-bold: 700;
+  }
+
+@import './navbar.scss';
+@import './currency-selector.scss';
+@import './product-list.scss';
+@import './product-card.scss';

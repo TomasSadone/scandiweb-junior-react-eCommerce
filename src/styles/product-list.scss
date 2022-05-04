@@ -1,0 +1,15 @@
+#display-category{
+  font-weight: var(--font-weight-regular);
+  font-size: 2.625rem;
+  margin-bottom: 1em;
+}
+#display-category:first-letter {
+  text-transform: capitalize;
+}
+.product-cards-container{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  column-gap: 1.5rem;
+  row-gap: 100px;
+  margin: 0 auto;
+}

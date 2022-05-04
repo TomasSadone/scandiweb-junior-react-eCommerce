@@ -1,0 +1,83 @@
+/* 
+Para poner una imagen en el select: despues se puede hacer un 
+rotate en la transition.
+    input[type=text] {
+  background-color: white;
+  background-image: url('searchicon.png');
+  background-position: 10px 10px;
+  background-repeat: no-repeat;
+  padding-left: 40px;
+}
+*/
+
+
+
+body {
+  margin: 0;
+  color: var(--c-text);
+  font-family: "Raleway", sans-serif;
+  font-weight: var(--font-weight-regular);
+}
+
+.categories__container {
+  display: flex;
+}
+
+.container {
+  margin: 0 auto;
+  width: 86%;
+}
+
+.currency-select,
+.currency-select * {
+  background: none;
+  color: inherit;
+  border: none;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+  outline: inherit;
+  font-weight: var(--font-weight-medium);
+}
+
+.btn__navbar {
+  color: inherit;
+  font: inherit;
+  padding: 0 1rem 0.3125rem 1rem;
+  text-decoration: none;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  transition: border-bottom 0.1s ease-in-out, border-top 0.1s ease-in-out;
+}
+.btn__navbar.active {
+  border-bottom: 2px solid var(--c-green);
+  border-top: 2px solid transparent;
+  color: var(--c-green);
+  font-weight: var(--font-weight-semi-bold);
+  outline: none;
+}
+
+
+#logo {
+  height: 41px;
+  width: 41px;
+  display: block;
+  margin: 0 auto;
+}
+/* REVISAR ALTURA NAVBAR */
+.navbar {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  /* min-height: 5rem; */
+  min-height: 9.5vh;
+}
+
+.navbar * {
+  min-height: 100%;
+}
+
+#divisaycarro {
+  display: flex;
+  justify-content: end;
+}
