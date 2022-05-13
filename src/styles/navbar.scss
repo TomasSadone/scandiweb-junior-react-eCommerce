@@ -19,7 +19,7 @@ body {
   font-weight: var(--font-weight-regular);
 }
 
-.categories__container {
+.navbar-categories-container {
   display: flex;
 }
 
@@ -40,7 +40,7 @@ body {
   font-weight: var(--font-weight-medium);
 }
 
-.btn__navbar {
+.btn-navbar {
   color: inherit;
   font: inherit;
   padding: 0 1rem 0.3125rem 1rem;
@@ -50,7 +50,7 @@ body {
   align-items: center;
   transition: border-bottom 0.1s ease-in-out, border-top 0.1s ease-in-out;
 }
-.btn__navbar.active {
+.btn-navbar.active {
   border-bottom: 2px solid var(--c-green);
   border-top: 2px solid transparent;
   color: var(--c-green);

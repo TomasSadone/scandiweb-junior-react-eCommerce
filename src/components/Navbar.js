@@ -11,9 +11,6 @@ export default class Navbar extends Component {
     //setear un state:
     this.state = {
       categories: [],
-      currencies: [{
-        symbol: ''
-      }]
     };
   }
 
@@ -23,32 +20,26 @@ export default class Navbar extends Component {
                 categories{
                     name
                 }
-                currencies{
-                  label
-                  symbol
-                }
             }
         `).then((data) => {
       localStorage.setItem("category", `${data.categories[0].name}`);
       this.setState({
         categories: data.categories,
-        currencies: data.currencies,
       });
     });
-    // const { categories } = this.state;
   }
   render() {
-    const { categories, currencies } = this.state;
+    const { categories } = this.state;
     return (
       <nav>
         <div className="container">
           <div className="navbar">
-            <div className="categories__container">
+            <div className="navbar-categories-container">
               {categories.map((category) => {
                 return (
                   <NavLink
                     className={({ isActive }) =>
-                      "btn__navbar " + (isActive ? "active" : "")
+                      "btn-navbar " + (isActive ? "active" : "")
                     }
                     key={category.name}
                     to={`/${category.name}`}
@@ -62,7 +53,7 @@ export default class Navbar extends Component {
               <img id="logo" src={logo} alt="Logo" />
             </div>
             <div id="divisaycarro">
-              <CurrencySelector currencies={currencies} />
+              <CurrencySelector />
               <select></select>
             </div>
           </div>
@@ -71,20 +62,3 @@ export default class Navbar extends Component {
     );
   }
 }
-
-/*
-return (
-  <button
-    className="btn__navbar"
-    // {({isActive})=>'btn__navbar ' + (isActive ? 'active' : '')}
-    key={category.name}
-    to={`/${category.name}`}
-  >
-    {category.name.toUpperCase()}
-  </button>
-);
-
-*/
-/*
-
-*/

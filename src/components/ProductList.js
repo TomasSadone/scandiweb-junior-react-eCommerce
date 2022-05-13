@@ -53,11 +53,13 @@ class ProductList extends Component {
   setSelectedProduct = (selectedProduct) => {
     this.setState({ selectedProduct: selectedProduct });
   };
+
   componentDidMount() {
     const { category } = this.props.params;
     const { getDataWithCategory } = this.state;
     getDataWithCategory(category);
   }
+
   componentDidUpdate(prevProps, prevState) {
     const { category } = this.props.params;
     const { navigation } = this.props;
@@ -69,6 +71,7 @@ class ProductList extends Component {
       navigation(`${this.state.selectedProduct}`);
     }
   }
+
   render() {
     const { category } = this.props.params;
     const { products } = this.state.category;

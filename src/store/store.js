@@ -1,13 +1,33 @@
-import { configureStore } from "@reduxjs/toolkit";
-import currencySelectorReducer from '../slices/currencySelectorSlice'
+import { combineReducers, configureStore } from "@reduxjs/toolkit";
+import currencySelectorReducer from "../slices/currencySelectorSlice";
+import cartReducer from "../slices/cartSlice";
+import { persistStore, persistReducer } from "redux-persist";
+import storage from "redux-persist/lib/storage";
 
-const initialState = {
-    selectedCurrency: localStorage.getItem('selectedCurrency') || ''
-  };
+const persistConfig = {
+  key: "persist-key",
+  storage,
+};
+
+const reducers = combineReducers({
+  currency: currencySelectorReducer,
+  cart: cartReducer,
+});
+
+const persistedReducer = persistReducer(persistConfig, reducers);
 
 export const store = configureStore({
-  reducer: {
-    currency: currencySelectorReducer,
-  },
-  initialState
+  reducer: persistedReducer,
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware({
+    serializableCheck: false
+  }),
 });
+
+export const persistor = persistStore(store)
+
+// export const store = configureStore({
+//   reducer: {
+//     currency: currencySelectorReducer,
+//     cart: cartReducer,
+//   },
+// });

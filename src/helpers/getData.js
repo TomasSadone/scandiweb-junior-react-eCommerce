@@ -12,6 +12,5 @@ export const getData = async (query, variables) =>{
         }
     );
     const {data} = await resp.json();
-    // console.log(data)
     return data
 }

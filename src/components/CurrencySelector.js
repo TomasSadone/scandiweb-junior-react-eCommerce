@@ -1,15 +1,18 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { getData } from "../helpers/getData";
 import arrow from "../icons/arrow.svg";
 import { changeCurrency } from "../slices/currencySelectorSlice";
 
 class CurrencySelector extends Component {
   constructor(props) {
     super(props);
-    const { currencies } = this.props;
+    //el problema es que estas no vienen aca de entrada, ver si se puede hacer el pedido aca en didmount y despachar ahi
+
     this.dropDownMenu = React.createRef();
     this.dropDownButton = React.createRef();
     this.handleClickOutside = this.handleClickOutside.bind(this);
+    this.handleCurrencyChange = this.handleCurrencyChange.bind(this);
     this.state = {
       currencies: [
         /*
@@ -21,19 +24,39 @@ class CurrencySelector extends Component {
                 */
       ],
       isOpen: false,
-      currentCurrency:
-        localStorage.getItem("selectedCurrency") || currencies[0].symbol,
     };
   }
 
   componentDidMount() {
     document.addEventListener("mousedown", this.handleClickOutside);
+    getData(`
+            query {
+                currencies{
+                  label
+                  symbol
+                }
+            }
+        `).then((data) => {
+      this.setState((state) => ({
+        ...state,
+        currencies: data.currencies,
+        currentCurrency:
+          localStorage.getItem("selectedCurrency") || data.currencies[0].symbol,
+      }));
+
+      this.props.changeCurrency(
+        localStorage.getItem("selectedCurrency") || data.currencies[0].symbol
+      );
+    });
   }
 
   componentWillUnmount() {
     document.removeEventListener("mousedown", this.handleClickOutside);
   }
 
+  //esta funcion puede tener en cambio de las referencias argumentos,
+  //y que se llame otra funcion en el componente propio, que le pase todos
+  //los argumentos a esta, asi esta queda intacta y se reusa
   handleClickOutside(event) {
     if (
       !this.dropDownButton.current.contains(event.target) &&
@@ -46,28 +69,32 @@ class CurrencySelector extends Component {
     }
   }
 
+  handleCurrencyChange = ({ target }) => {
+    localStorage.setItem("selectedCurrency", `${target.id}`);
+    this.setState((state) => ({
+      ...state,
+      currentCurrency: target.id,
+    }));
+    this.props.changeCurrency(target.id);
+  };
   render() {
     const { isOpen, currentCurrency } = this.state;
-    const { currencies } = this.props;
+    const { currencies } = this.state;
 
-    const handleCurrencyChange = ({ target }) => {
-      localStorage.setItem("selectedCurrency", `${target.id}`);
+    const setIsOpen = () => {
+      // !isOpen
+      //   ? this.setState((state) => ({
+      //       ...state,
+      //       isOpen: true,
+      //     }))
+      //   : this.setState((state) => ({
+      //       ...state,
+      //       isOpen: false,
+      //     }));
       this.setState((state) => ({
         ...state,
-        currentCurrency: target.id,
+        isOpen: !isOpen,
       }));
-      this.props.changeCurrency(target.id);
-    };
-    const setIsOpen = () => {
-      !isOpen
-        ? this.setState((state) => ({
-            ...state,
-            isOpen: true,
-          }))
-        : this.setState((state) => ({
-            ...state,
-            isOpen: false,
-          }));
     };
 
     return (
@@ -96,7 +123,7 @@ class CurrencySelector extends Component {
               <div
                 key={currency.symbol}
                 id={currency.symbol}
-                onClick={handleCurrencyChange}
+                onClick={this.handleCurrencyChange}
                 className={`dropdown-element ${
                   isOpen && "dropdown-element-isOpen"
                 }

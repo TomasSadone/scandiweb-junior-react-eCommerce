@@ -1,0 +1,108 @@
+.wide-solid-btn{
+  border: none;
+  background: var(--c-green);
+  color: white;
+  padding: 1em 2em;
+}
+
+#add-to-cart{
+  width: 100%;
+  margin-bottom: 2rem;
+}
+
+.arrow {
+  margin: auto auto;
+  width: 20%;
+}
+.arrow-carousel {
+  min-width: 10%;
+  display: flex;
+  flex-direction: column;
+}
+
+
+#brand {
+  font-weight: var(--font-weight-semi-bold);
+  margin-bottom: 1rem;
+}
+
+h3 {
+  font-weight: var(--font-weight-bold);
+  font-size: 1.125rem;
+  margin: 0;
+  margin-bottom: 0.5rem;
+}
+
+header * {
+  margin: 0;
+  font-size: 1.875rem;
+}
+
+.img-carousel {
+  background-size: cover;
+  cursor: pointer;
+  &:before {
+    //makes height = min-width
+    content: "";
+    padding-top: 100%;
+    float: left;
+  }
+}
+.img-carousel-container {
+  display: flex;
+  gap: 2rem;
+  flex-direction: column;
+  max-height: 75vh;
+  overflow: auto;
+  /* Hide scrollbar for IE, Edge and Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+/* Hide scrollbar for Chrome, Safari and Opera */
+.img-carousel-container::-webkit-scrollbar {
+  display: none;
+}
+
+
+
+#name {
+  font-weight: var(--font-weight-regular);
+  //margin bottom tentativo
+  margin-bottom: 1.4em;
+}
+
+.product-page-flex-container {
+  display: flex;
+  margin-top: 2.1rem;
+  gap: 2.5rem;
+  max-height: 80vh;
+}
+
+.product-page-main-image {
+  max-height: 80vh;
+  max-width: 100%;
+}
+.product-page-main-image-container {
+  width: 100%;
+  display: grid;
+  place-items: center;
+}
+
+.product-page-price{
+  font-size: 1.5rem;
+  font-weight: var(--font-weight-bold);
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.product-page-info-column {
+  width: 50%;
+  margin-right: 5%;
+  // max-height: 75vh;
+  overflow: auto;
+  //wanted to do:
+  // overflow-x: visible;
+  // overflow-y: auto
+  //but it's literally imposible in css. there's no way to do it
+  //this would fix sidescrolling in canada goose jacket
+}
