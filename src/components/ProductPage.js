@@ -25,7 +25,6 @@ class ProductPage extends Component {
 
   componentDidMount() {
     const { id } = this.props.params;
-    console.log(id);
     getData(
       `
       query getProduct($id:String!){
@@ -258,6 +257,3 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps()
 )(productPageWithParams(ProductPage));
-
-// export default productPageWithParams(ProductPage);
-//lineas hasta aca 1167

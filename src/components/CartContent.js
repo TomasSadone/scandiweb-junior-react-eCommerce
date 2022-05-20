@@ -108,7 +108,6 @@ class CartContent extends Component {
           ></div>
         ) : (
           <>
-            {/*si hr es false inline style en cart-element para dar margintop*/}
             <div
               className={`cart-element ${
                 className === "cart-overlay" && "cart-overlay"
@@ -184,7 +183,6 @@ class CartContent extends Component {
 const mapStateToProps = (state) => {
   return {
     currency: state.currency,
-    // cart: state.cart
   };
 };
 const mapDispatchToProps = () => {

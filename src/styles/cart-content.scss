@@ -42,7 +42,6 @@
 
 .cart-element-image {
   max-width: 100%;
-  //   margin: auto;
 }
 
 .cart-element-image-container {
@@ -113,8 +112,6 @@ hr {
   /* -- OPTIONS SELECTOR COMPONENT -- */
   .attributes-options{
     flex-wrap: wrap;
-    // display: grid;
-    // grid-template-columns: repeat(2, 1fr);
   }
   .value-type-text{
     font-size: 14px;

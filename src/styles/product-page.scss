@@ -67,7 +67,6 @@ header * {
 
 #name {
   font-weight: var(--font-weight-regular);
-  //margin bottom tentativo
   margin-bottom: 1.4em;
 }
 
@@ -75,7 +74,6 @@ header * {
   display: flex;
   padding-top: 2.1rem;
   gap: 2.5rem;
-  // height: 90vh;
 }
 
 .product-page-main-image {
@@ -100,9 +98,4 @@ header * {
   margin-right: 5%;
   max-height: 75vh;
   overflow: auto;
-  //wanted to do:
-  // overflow-x: visible;
-  // overflow-y: auto
-  //but it's literally imposible in css. there's no way to do it
-  //this would fix sidescrolling in canada goose jacket
 }

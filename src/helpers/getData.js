@@ -1,4 +1,3 @@
-//this function takes a string
 export const getData = async (query, variables) =>{
 
     const resp = await fetch(

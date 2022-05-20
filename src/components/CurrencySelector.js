@@ -7,7 +7,6 @@ import { changeCurrency } from "../slices/currencySelectorSlice";
 class CurrencySelector extends Component {
   constructor(props) {
     super(props);
-    //el problema es que estas no vienen aca de entrada, ver si se puede hacer el pedido aca en didmount y despachar ahi
 
     this.dropDownMenu = React.createRef();
     this.dropDownButton = React.createRef();
@@ -54,9 +53,6 @@ class CurrencySelector extends Component {
     document.removeEventListener("mousedown", this.handleClickOutside);
   }
 
-  //esta funcion puede tener en cambio de las referencias argumentos,
-  //y que se llame otra funcion en el componente propio, que le pase todos
-  //los argumentos a esta, asi esta queda intacta y se reusa
   handleClickOutside(event) {
     if (
       !this.dropDownButton.current.contains(event.target) &&

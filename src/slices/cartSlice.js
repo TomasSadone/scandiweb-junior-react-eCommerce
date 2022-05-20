@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   cartItems: [],
-  overlayOpen: false
+  overlayOpen: false,
 };
 
 export const cartSlice = createSlice({
@@ -39,14 +39,19 @@ export const cartSlice = createSlice({
       );
       state.cartItems = newCartItems;
     },
-    toggleOverlay: (state, {payload}) => {
-      state.overlayOpen = payload
-    }
+    toggleOverlay: (state, { payload }) => {
+      state.overlayOpen = payload;
+    },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { addNewProduct, addItem, removeItem, removeProduct, toggleOverlay } =
-  cartSlice.actions;
+export const {
+  addNewProduct,
+  addItem,
+  removeItem,
+  removeProduct,
+  toggleOverlay,
+} = cartSlice.actions;
 
 export default cartSlice.reducer;

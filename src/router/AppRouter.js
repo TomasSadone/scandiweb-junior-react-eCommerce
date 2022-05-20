@@ -14,7 +14,6 @@ class AppRouter extends Component {
         <BrowserRouter>
           <Navbar />
           <Routes>
-            {/* si algo no esta andando cambiar * por / */}
             <Route path="*" element={<Navigate to={`/${this.props.category.category}`} />} />
             <Route exact path="/:category" element={<ProductList />} />
             <Route exact path="/:category/:id" element={<ProductPage />} />
