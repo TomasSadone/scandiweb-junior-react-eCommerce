@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import Cart from "../components/Cart";
 import Navbar from "../components/Navbar";
@@ -6,16 +7,15 @@ import ProductList from "../components/ProductList";
 import ProductPage from "../components/ProductPage";
 
 
-export default class AppRouter extends Component {
+class AppRouter extends Component {
   render() {
-    const category = localStorage.getItem('category')
     return (
       <>
         <BrowserRouter>
           <Navbar />
           <Routes>
             {/* si algo no esta andando cambiar * por / */}
-            <Route path="*" element={<Navigate to={`/${category}`} />} />
+            <Route path="*" element={<Navigate to={`/${this.props.category.category}`} />} />
             <Route exact path="/:category" element={<ProductList />} />
             <Route exact path="/:category/:id" element={<ProductPage />} />
             <Route exact path="/cart" element={<Cart />} />
@@ -25,3 +25,12 @@ export default class AppRouter extends Component {
     );
   }
 }
+
+const mapStateToProps = (state) => {
+  return {
+    category: state.category
+  };
+};
+
+
+export default connect(mapStateToProps)(AppRouter);

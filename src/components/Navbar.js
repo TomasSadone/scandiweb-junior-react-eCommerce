@@ -3,12 +3,13 @@ import { NavLink } from "react-router-dom";
 import { getData } from "../helpers/getData";
 import logo from "../icons/a-logo.svg";
 import CurrencySelector from "./CurrencySelector";
+import { setInitialCategory } from "../slices/categorySlice";
+import { connect } from "react-redux";
+import CartOverlay from "./CartOverlay";
 
-export default class Navbar extends Component {
-  //como lo hizo este loco:
+class Navbar extends Component {
   constructor() {
     super();
-    //setear un state:
     this.state = {
       categories: [],
     };
@@ -22,7 +23,7 @@ export default class Navbar extends Component {
                 }
             }
         `).then((data) => {
-      localStorage.setItem("category", `${data.categories[0].name}`);
+      this.props.setInitialCategory(data.categories[0].name);
       this.setState({
         categories: data.categories,
       });
@@ -54,7 +55,7 @@ export default class Navbar extends Component {
             </div>
             <div id="divisaycarro">
               <CurrencySelector />
-              <select></select>
+              <CartOverlay />
             </div>
           </div>
         </div>
@@ -62,3 +63,11 @@ export default class Navbar extends Component {
     );
   }
 }
+
+const mapDispatchToProps = () => {
+  return {
+    setInitialCategory,
+  };
+};
+
+export default connect(null, mapDispatchToProps())(Navbar);

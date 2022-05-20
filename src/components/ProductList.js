@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { getData } from "../helpers/getData";
 import ProductCard from "./ProductCard";
@@ -30,6 +31,9 @@ class ProductList extends Component {
                     gallery
                     id
                     brand
+                    attributes{
+                      id
+                    }
                     prices{
                         currency{
                             label
@@ -77,19 +81,30 @@ class ProductList extends Component {
     const { products } = this.state.category;
 
     return (
-      <div className="container">
-        <h1 id="display-category">{category}</h1>
-        <div className="product-cards-container">
-          {products.map((product) => (
-            <ProductCard
-              setSelectedProduct={this.setSelectedProduct}
-              key={product.name}
-              {...product}
-            />
-          ))}
+      <div className={`${this.props.cart.overlayOpen && "overlay"}`}>
+        <div className="container">
+          <h1 className="overlay-titles" id="display-category">
+            {category}
+          </h1>
+          <div className="product-cards-container">
+            {products.map((product) => (
+              <ProductCard
+                setSelectedProduct={this.setSelectedProduct}
+                key={product.name}
+                {...product}
+              />
+            ))}
+          </div>
         </div>
       </div>
     );
   }
 }
-export default productListWithParams(ProductList);
+
+const mapStateToProps = (state) => {
+  return {
+    cart: state.cart,
+  };
+};
+
+export default connect(mapStateToProps)(productListWithParams(ProductList));

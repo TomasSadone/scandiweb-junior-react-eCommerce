@@ -1,0 +1,136 @@
+.cart-element {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cart-element-add-substract {
+  min-width: 30px;
+  width: 100%;
+  background: white;
+  border: 1px solid black;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &:before {
+    //makes height = min-width
+    content: "";
+    padding-top: 100%;
+    float: left;
+  }
+}
+
+.cart-element-carousel-arrow {
+  position: absolute;
+  display: flex;
+  gap: 10px;
+  bottom: 1rem;
+  right: 1rem;
+}
+
+.cart-element-counter {
+  display: flex;
+  flex-direction: column;
+  font-size: 24px;
+  justify-content: space-between;
+  & * {
+    margin: 0 auto;
+  }
+}
+
+.cart-element-image {
+  max-width: 100%;
+  //   margin: auto;
+}
+
+.cart-element-image-container {
+  position: relative;
+  display: grid;
+  place-items: center;
+}
+
+.cart-element-image-quantity {
+  display: flex;
+  gap: 24px;
+  min-width: 30%;
+  max-width: min-content;
+}
+
+.cart-element-price {
+  font-size: 24px;
+  font-weight: var(--font-weight-bold);
+  margin: 0.83em 0 0.83em 0;
+}
+
+.cart-element-title {
+  font-size: 30px;
+  font-weight: var(--font-weight-semi-bold);
+  margin-bottom: 0.53em;
+}
+
+.cart-element-subtitle {
+  font-size: 30px;
+  font-weight: var(--font-weight-regular);
+  margin: 0;
+}
+
+hr {
+  border-top: 1px solid #e5e5e5;
+}
+
+/*-- OVERLAY DESIGN --*/
+
+.cart-overlay{
+  margin-bottom: 40px;  
+  gap: 12px;
+
+
+  .cart-element-title, .cart-element-subtitle{
+    font-weight: 300;
+    font-size: 16px;
+  }
+  .cart-element-price{
+    font-size: 16px;
+    font-weight: 500;
+  }
+  h3{
+    font-size: 14px;
+    font-weight: 400;
+  }
+  .cart-element-image-quantity{
+    min-width: 60%;
+    gap: 8px;
+  }
+  .cart-element-add-substract{
+    min-width: 24px;
+  }
+  
+  .cart-element-counter > p{
+    font-size: 16px;
+  }
+  /* -- OPTIONS SELECTOR COMPONENT -- */
+  .attributes-options{
+    flex-wrap: wrap;
+    // display: grid;
+    // grid-template-columns: repeat(2, 1fr);
+  }
+  .value-type-text{
+    font-size: 14px;
+    min-width: min-content;
+    &.false{
+      color: #A6A6A6;
+      border: 1px solid #A6A6A6;
+      background-color: #F4F4F4;
+    }
+  }
+  .value-type-swatch{
+    min-height: 20px;
+    min-width: 20px;
+  }
+  .cart-element-carousel-arrow{
+    pointer-events: none;
+    opacity: 0;
+  }
+}

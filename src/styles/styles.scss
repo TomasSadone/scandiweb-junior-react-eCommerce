@@ -15,5 +15,34 @@
 @import "./loader.scss";
 @import "./product-page.scss";
 @import "./options-selector.scss";
+@import "./cart-content.scss";
+@import "./cart-overlay.scss";
 @import "./cart.scss";
-@import "./overlayCart.scss";
+@import "./dropdown-menu.scss";
+
+/*
+  -- GENERAL CLASSES --
+*/
+
+.overlay {
+  position: relative;
+}
+
+.overlay:before {
+  content: " ";
+  width: 100%;
+  min-height: 100vh;
+  height: 100%;
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background: rgba(57, 55, 72, 0.22);
+}
+
+.overlay-titles {
+  margin: 0;
+  // padding: 22px 0 22px 0;
+  padding-bottom: 2.625rem;
+  padding-top: 2.1rem;
+}

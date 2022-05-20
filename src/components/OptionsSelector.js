@@ -2,8 +2,13 @@ import React, { Component } from "react";
 
 export default class OptionsSelector extends Component {
   render() {
-    const { attributes, className, setSelectedOption, selectedOptions, disabled } =
-      this.props;
+    const {
+      attributes,
+      className,
+      setSelectedOption,
+      selectedOptions,
+      disabled,
+    } = this.props;
 
     return attributes.map((attribute) => {
       return (
@@ -28,20 +33,20 @@ export default class OptionsSelector extends Component {
                       : "value-type-text"
                   } ${className.isSelectable}
                     ${
-                      item.displayValue ===
-                        selectedOption?.displayValue &&
+                      item.displayValue === selectedOption?.displayValue &&
                       "selected-option"
                     }
                   `}
                   style={
                     attribute.type === "swatch"
-                      ? { backgroundColor: item.value,
-                        border: item.value === '#FFFFFF' ? '1px solid black' : 'none',
-                      }
+                      ? {
+                          backgroundColor: item.value,
+                          border:
+                            item.value === "#FFFFFF"
+                              ? "1px solid black"
+                              : "none",
+                        }
                       : {}
-                    // attribute.type === "swatch"
-                    //   ? { backgroundColor: item.value }
-                    //   : {}
                   }
                   alt={item.displayValue}
                   name={attribute.name}

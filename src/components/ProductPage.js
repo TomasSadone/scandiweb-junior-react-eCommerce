@@ -5,7 +5,7 @@ import { getData } from "../helpers/getData";
 import PriceDisplay from "./PriceDisplay";
 import arrow from "../icons/arrow.svg";
 import OptionsSelector from "./OptionsSelector";
-import { addProduct } from "../slices/cartSlice";
+import { addNewProduct, addItem } from "../slices/cartSlice";
 
 function productPageWithParams(ProductList) {
   return (props) => <ProductList {...props} params={useParams()} />;
@@ -25,7 +25,7 @@ class ProductPage extends Component {
 
   componentDidMount() {
     const { id } = this.props.params;
-    console.log(id)
+    console.log(id);
     getData(
       `
       query getProduct($id:String!){
@@ -96,23 +96,46 @@ class ProductPage extends Component {
 
   addToCart = () => {
     const { selectedOptions, productInfo } = this.state;
-    const { addProduct, params } = this.props;
+    const { addItem, addNewProduct, params, cart } = this.props;
+    let key = params.id;
+    for (let i = 0; i < selectedOptions.length; i++) {
+      key += selectedOptions[i].displayValue;
+    }
+    const product = {
+      productId: params.id,
+      quantity: 1,
+      selectedOptions,
+      key,
+      prices: this.state.productInfo.prices,
+    };
     if (selectedOptions.length < productInfo.attributes.length) {
       return this.setState((state) => ({
         ...state,
         addToCartError: true,
       }));
     }
-    addProduct({
-      productId: params.id,
-      selectedOptions,
-    });
-    return this.setState((state) => ({
+    if (
+      cart.cartItems.find(
+        (cartItem) =>
+          JSON.stringify(cartItem.selectedOptions) ===
+            JSON.stringify(product.selectedOptions) &&
+          cartItem.productId === product.productId
+      )
+    ) {
+      addItem({
+        productId: product.productId,
+        selectedOptions: product.selectedOptions,
+      });
+      return this.addToCartErrorFalse();
+    }
+    addNewProduct(product);
+    this.addToCartErrorFalse();
+  };
+  addToCartErrorFalse = () =>
+    this.setState((state) => ({
       ...state,
       addToCartError: false,
     }));
-    // console.log("agregado al carrito");
-  };
 
   render() {
     const {
@@ -137,78 +160,80 @@ class ProductPage extends Component {
             <div className="product-page-loader"></div>
           </div>
         ) : (
-          <div className="container">
-            <div className="product-page-flex-container">
-              <div className="arrow-carousel">
-                <div className="img-carousel-container">
-                  {gallery.map((image) => (
-                    <div
-                      id={image}
-                      key={image}
-                      onClick={setSelectedImage}
-                      style={{
-                        backgroundImage: `url(${image})`,
-                      }}
-                      className="img-carousel"
-                      alt={"product"}
-                    />
-                  ))}
+          <div className={`${this.props.cart.overlayOpen && "overlay"}`}>
+            <div className="container">
+              <div className="product-page-flex-container">
+                <div className="arrow-carousel">
+                  <div className="img-carousel-container">
+                    {gallery.map((image) => (
+                      <div
+                        id={image}
+                        key={image}
+                        onClick={setSelectedImage}
+                        style={{
+                          backgroundImage: `url(${image})`,
+                        }}
+                        className="img-carousel"
+                        alt={"product"}
+                      />
+                    ))}
+                  </div>
+                  {gallery.length > 4 && (
+                    <img className="arrow" src={arrow} alt="arrow" />
+                  )}
                 </div>
-                {gallery.length > 4 && (
-                  <img className="arrow" src={arrow} alt="arrow" />
-                )}
-              </div>
-              <div className="product-page-main-image-container">
-                <img
-                  className="product-page-main-image"
-                  src={selectedImage}
-                  alt="product"
-                />
-              </div>
-              <div className="product-page-info-column">
-                <header>
-                  <h1 id="brand">{brand}</h1>
-                  <h2 id="name">{name}</h2>
-                </header>
-                <OptionsSelector
-                  className={{ isSelectable: "isSelectable" }}
-                  attributes={attributes}
-                  setSelectedOption={this.setSelectedOption}
-                  selectedOptions={selectedOptions}
-                  disabled={!inStock}
-                />
-                <div>
-                  <h3>PRICE:</h3>
-                  <PriceDisplay
-                    className="product-page-price"
-                    prices={prices}
+                <div className="product-page-main-image-container">
+                  <img
+                    className="product-page-main-image"
+                    src={selectedImage}
+                    alt="product"
                   />
                 </div>
-                {addToCartError && (
-                  <p
-                    style={{
-                      fontWeight: "500",
-                      marginBottom: "10px",
-                      color: "red",
-                    }}
+                <div className="product-page-info-column">
+                  <header>
+                    <h1 id="brand">{brand}</h1>
+                    <h2 id="name">{name}</h2>
+                  </header>
+                  <OptionsSelector
+                    className={{ isSelectable: "isSelectable" }}
+                    attributes={attributes}
+                    setSelectedOption={this.setSelectedOption}
+                    selectedOptions={selectedOptions}
+                    disabled={!inStock}
+                  />
+                  <div>
+                    <h3>PRICE:</h3>
+                    <PriceDisplay
+                      className="product-page-price"
+                      prices={prices}
+                    />
+                  </div>
+                  {addToCartError && (
+                    <p
+                      style={{
+                        fontWeight: "500",
+                        marginBottom: "10px",
+                        color: "red",
+                      }}
+                    >
+                      You must select every option
+                    </p>
+                  )}
+                  <button
+                    id="add-to-cart"
+                    className="wide-solid-btn"
+                    onClick={this.addToCart}
+                    disabled={!inStock}
                   >
-                    You must select every option
-                  </p>
-                )}
-                <button
-                  id="add-to-cart"
-                  className="wide-solid-btn"
-                  onClick={this.addToCart}
-                  disabled={!inStock}
-                >
-                  ADD TO CART
-                </button>
-                {!inStock && (
-                  <span style={{ fontWeight: "600" }}>
-                    This product is out of stock
-                  </span>
-                )}
-                <div dangerouslySetInnerHTML={{ __html: description }}></div>
+                    ADD TO CART
+                  </button>
+                  {!inStock && (
+                    <span style={{ fontWeight: "600", marginBottom: "10px" }}>
+                      This product is out of stock
+                    </span>
+                  )}
+                  <div dangerouslySetInnerHTML={{ __html: description }}></div>
+                </div>
               </div>
             </div>
           </div>
@@ -217,21 +242,22 @@ class ProductPage extends Component {
     );
   }
 }
-// const mapStateToProps = (state) => {
-//   return {
-//     currency: state.currency,
-//   };
-// };
+const mapStateToProps = (state) => {
+  return {
+    cart: state.cart,
+  };
+};
 const mapDispatchToProps = () => {
   return {
-    addProduct,
+    addNewProduct,
+    addItem,
   };
 };
 
 export default connect(
-  null,
-  // mapStateToProps,
+  mapStateToProps,
   mapDispatchToProps()
 )(productPageWithParams(ProductPage));
 
 // export default productPageWithParams(ProductPage);
+//lineas hasta aca 1167

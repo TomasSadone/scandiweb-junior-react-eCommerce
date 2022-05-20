@@ -82,15 +82,6 @@ class CurrencySelector extends Component {
     const { currencies } = this.state;
 
     const setIsOpen = () => {
-      // !isOpen
-      //   ? this.setState((state) => ({
-      //       ...state,
-      //       isOpen: true,
-      //     }))
-      //   : this.setState((state) => ({
-      //       ...state,
-      //       isOpen: false,
-      //     }));
       this.setState((state) => ({
         ...state,
         isOpen: !isOpen,
@@ -99,7 +90,7 @@ class CurrencySelector extends Component {
 
     return (
       <>
-        <li className="dropdown">
+        <li className="dropdown dropdown-currency-selector">
           <div
             className="dropdown-button"
             onClick={setIsOpen}
@@ -116,8 +107,9 @@ class CurrencySelector extends Component {
 
           <div
             ref={this.dropDownMenu}
-            className={`dropdown-menu ${isOpen && "dropdown-menu-isOpen"}`}
-            id="div"
+            className={`dropdown-menu dropdown-menu-currency-selector ${
+              isOpen && "dropdown-menu-isOpen"
+            }`}
           >
             {currencies.map((currency) => (
               <div

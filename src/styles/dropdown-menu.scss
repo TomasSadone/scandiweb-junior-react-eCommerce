@@ -1,0 +1,23 @@
+.dropdown {
+  // font-size: 1.125rem;
+  list-style-type: none;
+  position: relative;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: calc(100% + 0.25em);
+  background-color: white;
+  right: -60px;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.15);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-30px);
+  transition: opacity 150ms ease-in-out, transform 150ms ease-in-out;
+  z-index: 9999;
+}
+.dropdown-menu-isOpen {
+  opacity: 1;
+  transform: translateY(-15px);
+  pointer-events: auto;
+}

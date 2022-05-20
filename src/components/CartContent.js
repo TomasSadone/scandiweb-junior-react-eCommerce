@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { getData } from "../helpers/getData";
+import { removeItem, addItem, removeProduct } from "../slices/cartSlice";
 import OptionsSelector from "./OptionsSelector";
 import PriceDisplay from "./PriceDisplay";
 import leftArrow from "../icons/left-arrow.svg";
@@ -46,17 +47,58 @@ class CartContent extends Component {
         ...state,
         productInfo: data.product,
         loading: false,
-        selectedImage: data.product.gallery[0],
+        selectedImage: 0,
       }));
     });
   }
 
   render() {
-    const { selectedOptions, currency, hr } = this.props;
+    const {
+      selectedOptions,
+      currency,
+      hr,
+      addItem,
+      removeItem,
+      removeProduct,
+      quantity,
+      productId,
+      className,
+    } = this.props;
     const { loading, productInfo, selectedImage } = this.state;
     const { name, gallery, brand, attributes, prices } = productInfo || {};
-
-    console.log(selectedOptions);
+    const nextImage = () => {
+      if (selectedImage === gallery.length - 1) {
+        this.setState((state) => ({
+          ...state,
+          selectedImage: 0,
+        }));
+        return;
+      }
+      this.setState((state) => ({
+        ...state,
+        selectedImage: state.selectedImage + 1,
+      }));
+    };
+    const prevImage = () => {
+      if (selectedImage === 0) {
+        this.setState((state) => ({
+          ...state,
+          selectedImage: gallery.length - 1,
+        }));
+        return;
+      }
+      this.setState((state) => ({
+        ...state,
+        selectedImage: state.selectedImage - 1,
+      }));
+    };
+    const handleRemoveItem = () => {
+      const payload = {
+        productId,
+        selectedOptions: selectedOptions,
+      };
+      quantity === 1 ? removeProduct(payload) : removeItem(payload);
+    };
     return (
       <>
         {loading ? (
@@ -66,10 +108,15 @@ class CartContent extends Component {
           ></div>
         ) : (
           <>
-            <div className="cart-element">
-              <div className="cart-element-info">
-                <h1 className="cart-element-title">{brand}</h1>
-                <h2 className="cart-element-subtitle">{name}</h2>
+            {/*si hr es false inline style en cart-element para dar margintop*/}
+            <div
+              className={`cart-element ${
+                className === "cart-overlay" && "cart-overlay"
+              }`}
+            >
+              <div className={`cart-element-info `}>
+                <h1 className={`cart-element-title `}>{brand}</h1>
+                <h2 className={`cart-element-subtitle `}>{name}</h2>
                 <PriceDisplay
                   prices={prices}
                   currency={currency}
@@ -80,23 +127,50 @@ class CartContent extends Component {
                   attributes={attributes}
                   selectedOptions={selectedOptions}
                   disabled={true}
+                  setSelectedOption={() => {}}
                 />
               </div>
-              <div className="cart-element-image-quantity">
-                <div className="cart-element-counter">
-                  <button className="cart-element-add-substract">+</button>
-                  <p>1</p>
-                  <button className="cart-element-add-substract">-</button>
+              <div className={`cart-element-image-quantity `}>
+                <div className={`cart-element-counter `}>
+                  <button
+                    className={`cart-element-add-substract `}
+                    onClick={() =>
+                      addItem({
+                        productId,
+                        selectedOptions: selectedOptions,
+                      })
+                    }
+                  >
+                    +
+                  </button>
+                  <p>{quantity}</p>
+                  <button
+                    className={`cart-element-add-substract `}
+                    onClick={handleRemoveItem}
+                  >
+                    -
+                  </button>
                 </div>
-                <div
-                className="cart-element-image"
-                  style={{
-                    backgroundImage: `url(${selectedImage})`,
-                  }}
-                  alt="product"
-                >
-                  <img src={leftArrow} alt="left arrow" />
-                  <img src={rightArrow} alt="right arrow" />
+                <div className={`cart-element-image-container `}>
+                  <img
+                    src={gallery[selectedImage]}
+                    alt="product"
+                    className={`cart-element-image `}
+                  />
+                  {gallery.length > 1 && (
+                    <div className={`cart-element-carousel-arrow `}>
+                      <img
+                        onClick={prevImage}
+                        src={leftArrow}
+                        alt="left arrow"
+                      />
+                      <img
+                        onClick={nextImage}
+                        src={rightArrow}
+                        alt="right arrow"
+                      />
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -110,6 +184,15 @@ class CartContent extends Component {
 const mapStateToProps = (state) => {
   return {
     currency: state.currency,
+    // cart: state.cart
   };
 };
-export default connect(mapStateToProps)(CartContent);
+const mapDispatchToProps = () => {
+  return {
+    addItem,
+    removeItem,
+    removeProduct,
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps())(CartContent);
