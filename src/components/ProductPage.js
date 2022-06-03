@@ -1,21 +1,21 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { useParams } from "react-router-dom";
-import { getData } from "../helpers/getData";
 import PriceDisplay from "./PriceDisplay";
 import arrow from "../icons/arrow.svg";
 import OptionsSelector from "./OptionsSelector";
 import { addNewProduct, addItem } from "../slices/cartSlice";
-
-function productPageWithParams(ProductList) {
-  return (props) => <ProductList {...props} params={useParams()} />;
-}
+import parse from "html-react-parser";
+import routerHOC from "../helpers/routerHOC";
+import { productListData } from "../helpers/productPageData";
+import { isArrayEqual } from "../helpers/isArrayEqual";
 
 class ProductPage extends Component {
   constructor(props) {
     super(props);
     this.setSelectedOption = this.setSelectedOption.bind(this);
+    this.replaceSelectedOption = this.replaceSelectedOption.bind(this);
     this.addToCart = this.addToCart.bind(this);
+    this.divInnerHTML = React.createRef();
     this.state = {
       loading: true,
       selectedOptions: [],
@@ -25,34 +25,7 @@ class ProductPage extends Component {
 
   componentDidMount() {
     const { id } = this.props.params;
-    getData(
-      `
-      query getProduct($id:String!){
-        product(id: $id){
-          name
-          inStock
-          gallery
-          brand
-          prices{
-            currency{
-              symbol
-            }
-            amount
-          }
-          description
-          attributes{
-            name
-            type
-            items{
-              displayValue
-              value
-            }
-          }
-        }
-      }
-      `,
-      { id }
-    ).then((data) => {
+    productListData(id).then((data) => {
       this.setState((state) => ({
         ...state,
         productInfo: data.product,
@@ -62,24 +35,15 @@ class ProductPage extends Component {
     });
   }
 
-  setSelectedOption = (name, id) => {
+  /* --  HANDLING SELECTING OPTIONS  --  */
+
+  setSelectedOption = (name, id, i) => {
     if (
       this.state.selectedOptions.find(
         (selectedOption) => selectedOption.name === name
       )
     ) {
-      let newSelectedOption = this.state.selectedOptions.filter(
-        (selectedOption) => selectedOption.name !== name
-      );
-      newSelectedOption.push({
-        name: name,
-        displayValue: id,
-      });
-      this.setState((state) => ({
-        ...state,
-        selectedOptions: newSelectedOption,
-      }));
-      return;
+      return this.replaceSelectedOption(name, id);
     }
     this.setState((state) => ({
       ...state,
@@ -93,49 +57,114 @@ class ProductPage extends Component {
     }));
   };
 
-  addToCart = () => {
-    const { selectedOptions, productInfo } = this.state;
-    const { addItem, addNewProduct, params, cart } = this.props;
-    let key = params.id;
+  replaceSelectedOption = (name, id) => {
+    let newSelectedOption = this.state.selectedOptions.filter(
+      (selectedOption) => selectedOption.name !== name
+    );
+    newSelectedOption.push({
+      name: name,
+      displayValue: id,
+    });
+    this.setState((state) => ({
+      ...state,
+      selectedOptions: newSelectedOption,
+    }));
+  };
+
+  /* --  HANDLING ADDING TO CART  --  */
+
+  createCartItemKey = () => {
+    const { selectedOptions } = this.state;
+    let key = this.props.params.id;
     for (let i = 0; i < selectedOptions.length; i++) {
       key += selectedOptions[i].displayValue;
     }
-    const product = {
-      productId: params.id,
-      quantity: 1,
-      selectedOptions,
-      key,
-      prices: this.state.productInfo.prices,
-    };
-    if (selectedOptions.length < productInfo.attributes.length) {
-      return this.setState((state) => ({
-        ...state,
-        addToCartError: true,
-      }));
-    }
-    if (
-      cart.cartItems.find(
-        (cartItem) =>
-          JSON.stringify(cartItem.selectedOptions) ===
-            JSON.stringify(product.selectedOptions) &&
-          cartItem.productId === product.productId
-      )
-    ) {
-      addItem({
-        productId: product.productId,
-        selectedOptions: product.selectedOptions,
-      });
-      return this.addToCartErrorFalse();
-    }
-    addNewProduct(product);
-    this.addToCartErrorFalse();
+    return key;
   };
-  addToCartErrorFalse = () =>
+
+  isExistingProduct = (cartItem) => {
+    if (
+      isArrayEqual(cartItem.selectedOptions, this.product().selectedOptions) &&
+      cartItem.productId === this.product().productId
+    )
+      return true;
+  };
+
+  product = () => ({
+    productId: this.props.params.id,
+    quantity: 1,
+    selectedOptions: this.state.selectedOptions,
+    key: this.createCartItemKey(),
+    prices: this.state.productInfo.prices,
+  });
+
+  addToCart = () => {
+    const { selectedOptions, productInfo } = this.state;
+    const { addItem, addNewProduct, cart } = this.props;
+
+    if (selectedOptions.length < productInfo.attributes.length) {
+      return this.addToCartError(true);
+    }
+    if (cart.cartItems.find((cartItem) => this.isExistingProduct(cartItem))) {
+      addItem({
+        productId: this.product().productId,
+        selectedOptions: this.product().selectedOptions,
+      });
+      return this.addToCartError(false);
+    }
+    addNewProduct(this.product());
+    this.addToCartError(false);
+  };
+
+  addToCartError = (boolean) =>
     this.setState((state) => ({
       ...state,
-      addToCartError: false,
+      addToCartError: boolean,
     }));
 
+  /* --  HANDLING SELECTED IMAGE  --  */
+
+  setSelectedImage = ({ target }) => {
+    this.setState((state) => ({
+      ...state,
+      selectedImage: target.id,
+    }));
+  };
+
+  /* --  CONDITIONAL & MAPS RENDERINGS  --  */
+
+  renderLoading = () => (
+    <div className="product-page-loader-flex">
+      <div className="product-page-loader"></div>
+    </div>
+  );
+  renderGallery = (image) => (
+    <div
+      id={image}
+      key={image}
+      onClick={this.setSelectedImage}
+      style={{
+        backgroundImage: `url(${image})`,
+      }}
+      className="img-carousel"
+      alt={"product"}
+    />
+  );
+
+  renderGalleryArrow = (gallery) => {
+    if (gallery.length > 4)
+      return <img className="arrow" src={arrow} alt="arrow" />;
+  };
+  renderOutOfStockText = (inStock) => {
+    if (!inStock) return <div className="out-of-stock-text">OUT OF STOCK</div>;
+  };
+  displayAddToCartError = (err) => {
+    if (err)
+      return (
+        <p className="product-page-error-msg">You must select every option</p>
+      );
+  };
+  
   render() {
     const {
       addToCartError,
@@ -146,55 +175,37 @@ class ProductPage extends Component {
     } = this.state;
     const { description, name, gallery, inStock, brand, attributes, prices } =
       productInfo || {};
-    const setSelectedImage = ({ target }) => {
-      this.setState((state) => ({
-        ...state,
-        selectedImage: target.id,
-      }));
-    };
+
     return (
       <>
         {loading ? (
-          <div className="product-page-loader-flex">
-            <div className="product-page-loader"></div>
-          </div>
+          this.renderLoading()
         ) : (
           <div className={`${this.props.cart.overlayOpen && "overlay"}`}>
             <div className="container">
               <div className="product-page-flex-container">
                 <div className="arrow-carousel">
-                  <div className="img-carousel-container">
-                    {gallery.map((image) => (
-                      <div
-                        id={image}
-                        key={image}
-                        onClick={setSelectedImage}
-                        style={{
-                          backgroundImage: `url(${image})`,
-                        }}
-                        className="img-carousel"
-                        alt={"product"}
-                      />
-                    ))}
+                  <div className="img-carousel-container hidden-scrollbar">
+                    {gallery.map(this.renderGallery)}
                   </div>
-                  {gallery.length > 4 && (
-                    <img className="arrow" src={arrow} alt="arrow" />
-                  )}
+                  {this.renderGalleryArrow(gallery)}
                 </div>
                 <div className="product-page-main-image-container">
-                  <img
-                    className="product-page-main-image"
-                    src={selectedImage}
-                    alt="product"
-                  />
+                  <div className={`${!inStock && "out-of-stock-pdp-image"}`}>
+                    <img
+                      className="product-page-main-image "
+                      src={selectedImage}
+                      alt="product"
+                    />
+                    {this.renderOutOfStockText(inStock)}
+                  </div>
                 </div>
-                <div className="product-page-info-column">
+                <div className="product-page-info-column hidden-scrollbar">
                   <header>
                     <h1 id="brand">{brand}</h1>
                     <h2 id="name">{name}</h2>
                   </header>
                   <OptionsSelector
-                    className={{ isSelectable: "isSelectable" }}
                     attributes={attributes}
                     setSelectedOption={this.setSelectedOption}
                     selectedOptions={selectedOptions}
@@ -207,17 +218,7 @@ class ProductPage extends Component {
                       prices={prices}
                     />
                   </div>
-                  {addToCartError && (
-                    <p
-                      style={{
-                        fontWeight: "500",
-                        marginBottom: "10px",
-                        color: "red",
-                      }}
-                    >
-                      You must select every option
-                    </p>
-                  )}
+                  {this.displayAddToCartError(addToCartError)}
                   <button
                     id="add-to-cart"
                     className="wide-solid-btn"
@@ -226,12 +227,7 @@ class ProductPage extends Component {
                   >
                     ADD TO CART
                   </button>
-                  {!inStock && (
-                    <span style={{ fontWeight: "600", marginBottom: "10px" }}>
-                      This product is out of stock
-                    </span>
-                  )}
-                  <div dangerouslySetInnerHTML={{ __html: description }}></div>
+                  <div>{parse(description)}</div>
                 </div>
               </div>
             </div>
@@ -256,4 +252,4 @@ const mapDispatchToProps = () => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps()
-)(productPageWithParams(ProductPage));
+)(routerHOC(ProductPage));

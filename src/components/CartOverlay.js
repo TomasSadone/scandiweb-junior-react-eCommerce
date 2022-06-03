@@ -5,11 +5,7 @@ import cartIcon from "../icons/black-empty-cart.svg";
 import CartContent from "./CartContent";
 import { toggleOverlay } from "../slices/cartSlice";
 import { totalPriceDisplay } from "../helpers/totalPrice";
-import { useNavigate } from "react-router-dom";
-
-function cartOverlayListWithParams(CartOverlay) {
-  return (props) => <CartOverlay {...props} navigation={useNavigate()} />;
-}
+import routerHOC from "../helpers/routerHOC";
 
 class CartOverlay extends Component {
   constructor(props) {
@@ -45,11 +41,33 @@ class CartOverlay extends Component {
     document.removeEventListener("mousedown", this.handleClickOutside);
   }
 
+  setIsOpen = () => {
+    const { toggleOverlay, cart } = this.props;
+    toggleOverlay(!cart.overlayOpen);
+  };
+
+  displayItemCount = () => {
+    const { cart } = this.props;
+    if (totalProductsCount(cart) > 0) {
+      return <p id="cart-icon-counter">{totalProductsCount(cart)}</p>;
+    }
+  };
+
+  renderCartContent = (cartItem) => (
+    <CartContent
+      hr={false}
+      key={cartItem.key}
+      className={"cart-overlay"}
+      {...cartItem}
+    />
+  );
+
+  classNameDropDownMenuOpen = () => {
+    if (this.props.cart.overlayOpen) return "dropdown-menu-isOpen";
+  };
+
   render() {
-    const { cart, currency, toggleOverlay } = this.props;
-    const setIsOpen = () => {
-      toggleOverlay(!cart.overlayOpen);
-    };
+    const { cart, currency } = this.props;
     const totalPrice = totalPriceDisplay(currency, cart);
 
     return (
@@ -57,21 +75,16 @@ class CartOverlay extends Component {
         <li className="dropdown">
           <div
             className="dropdown-button"
-            onClick={setIsOpen}
+            onClick={this.setIsOpen}
             ref={this.dropDownButton}
           >
             <img src={cartIcon} alt="arrow" />
-            {totalProductsCount(cart) > 0 && (
-              <p id="cart-icon-counter">{totalProductsCount(cart)}</p>
-            )}
+            {this.displayItemCount()}
           </div>
 
           <div
             ref={this.dropDownMenu}
-            style={{ boxShadow: "none" }}
-            className={`cart-overlay-content-box dropdown-menu ${
-              cart.overlayOpen && "dropdown-menu-isOpen"
-            }`}
+            className={`cart-overlay-content-box dropdown-menu ${this.classNameDropDownMenuOpen()}`}
           >
             <div className="cart-overlay-content-container">
               <p className="my-bag">
@@ -80,18 +93,14 @@ class CartOverlay extends Component {
                   {totalProductsCount(cart)} items
                 </span>
               </p>
-              {cart.cartItems.map((cartItem) => (
-                <CartContent
-                  hr={false}
-                  key={cartItem.key}
-                  className={"cart-overlay"}
-                  {...cartItem}
-                />
-              ))}
+
+              {cart.cartItems.map(this.renderCartContent)}
+
               <div className="cart-overlay-flex cart-overlay-total">
                 <p>Total</p>
                 <p>{`${currency.selectedCurrency}${totalPrice}`}</p>
               </div>
+
               <div className="cart-overlay-flex">
                 <button
                   className="wide-solid-btn view-bag  cart-overlay-button"
@@ -125,4 +134,4 @@ const mapDispatchToProps = () => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps()
-)(cartOverlayListWithParams(CartOverlay));
+)(routerHOC(CartOverlay));

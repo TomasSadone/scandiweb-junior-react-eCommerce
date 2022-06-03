@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { isArrayEqual } from "../helpers/isArrayEqual";
 
 const initialState = {
   cartItems: [],
@@ -15,8 +16,7 @@ export const cartSlice = createSlice({
     addItem: (state, { payload }) => {
       const item = state.cartItems.find(
         (cartItem) =>
-          JSON.stringify(cartItem.selectedOptions) ===
-            JSON.stringify(payload.selectedOptions) &&
+            isArrayEqual(cartItem.selectedOptions, payload.selectedOptions) &&
           cartItem.productId === payload.productId
       );
       item.quantity = item.quantity + 1;

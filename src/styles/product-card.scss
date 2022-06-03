@@ -2,18 +2,16 @@
   background: rgba(255, 255, 255, 0.5);
   background-size: cover;
   background-blend-mode: color;
+  position: relative;
 }
 
-.out-of-stock-text {
-  position: absolute;
-  white-space: nowrap;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color: #8d8f9a;
-  font-size: 1.5rem;
-  text-align: center;
+.product-card-error-msg{
+  font-weight: var(--font-weight-light);
+  font-size: 16px;
+  margin-bottom: 2px;
+  color: red;
 }
+
 .product-card-img {
   //min-height to force showing image
   min-width: 100%;

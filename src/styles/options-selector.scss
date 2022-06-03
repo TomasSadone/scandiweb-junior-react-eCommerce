@@ -1,8 +1,13 @@
 .attributes-options {
-  margin-bottom: 1.5rem;
   display: flex;
   gap: 0.5rem;
   margin-left: 2px;
+  margin-bottom: 1.5rem;
+
+}
+
+.attributes-options-container{
+  min-width: min-content;
 }
 
 .isSelectable {
@@ -17,6 +22,9 @@
   font: inherit;
   cursor: pointer;
   outline: inherit;
+  &:disabled{
+    cursor: default;
+  }
 }
 
 .value-type-swatch {
@@ -35,9 +43,6 @@
 
 .value-type-text {
   border: solid 1px black;
-  display: grid;
-  place-items: center;
-  max-width: 30%;
   width: 100%;
   padding: 0.4rem 0.2rem;
   & * {

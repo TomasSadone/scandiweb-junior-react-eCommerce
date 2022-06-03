@@ -25,10 +25,10 @@
   }
 }
 
-li.dropdown-currency-selector{
+li.dropdown-currency-selector {
   font-size: 1.125rem;
 }
-div.dropdown-menu-currency-selector{
+div.dropdown-menu-currency-selector {
   top: calc(100% + 1.25em);
 }
 
@@ -38,12 +38,12 @@ div.dropdown-menu-currency-selector{
   white-space: nowrap;
 }
 .dropdown-element-isOpen {
+  &:hover {
+    background-color: #eeeeee;
+  }
   pointer-events: auto;
   cursor: pointer;
-  &:hover{
-    background-color: #EEEEEE;
-  }
 }
-.dropdown-element-isOpen-selected{
-  background-color: #EEEEEE;
+.dropdown-element-isOpen-selected {
+  background-color: #eeeeee;
 }

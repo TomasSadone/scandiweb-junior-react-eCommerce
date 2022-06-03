@@ -10,18 +10,12 @@ class CurrencySelector extends Component {
 
     this.dropDownMenu = React.createRef();
     this.dropDownButton = React.createRef();
-    this.handleClickOutside = this.handleClickOutside.bind(this);
     this.handleCurrencyChange = this.handleCurrencyChange.bind(this);
+    this.handleClickOutside = this.handleClickOutside.bind(this);
+    this.setIsOpen = this.setIsOpen.bind(this);
+    this.setIsOpenFalse = this.setIsOpenFalse.bind(this);
     this.state = {
-      currencies: [
-        /*
-                currencies object example: 
-                {
-                    "label": "USD",
-                    "symbol": "$"
-                },...
-                */
-      ],
+      currencies: [],
       isOpen: false,
     };
   }
@@ -29,18 +23,16 @@ class CurrencySelector extends Component {
   componentDidMount() {
     document.addEventListener("mousedown", this.handleClickOutside);
     getData(`
-            query {
-                currencies{
-                  label
-                  symbol
-                }
+          query {
+            currencies{
+              label
+              symbol
             }
+          }
         `).then((data) => {
       this.setState((state) => ({
         ...state,
         currencies: data.currencies,
-        currentCurrency:
-          localStorage.getItem("selectedCurrency") || data.currencies[0].symbol,
       }));
 
       this.props.changeCurrency(
@@ -53,48 +45,75 @@ class CurrencySelector extends Component {
     document.removeEventListener("mousedown", this.handleClickOutside);
   }
 
+  setIsOpenFalse = () => {
+    this.setState((state) => ({
+      ...state,
+      isOpen: false,
+    }));
+  };
+
   handleClickOutside(event) {
     if (
       !this.dropDownButton.current.contains(event.target) &&
       !this.dropDownMenu.current.contains(event.target)
     ) {
-      this.setState((state) => ({
-        ...state,
-        isOpen: false,
-      }));
+      this.setIsOpenFalse();
+    }
+    if (this.dropDownMenu.current.contains(event.target)) {
+      this.handleCurrencyChange(event);
+      this.setIsOpenFalse();
     }
   }
 
   handleCurrencyChange = ({ target }) => {
     localStorage.setItem("selectedCurrency", `${target.id}`);
-    this.setState((state) => ({
-      ...state,
-      currentCurrency: target.id,
-    }));
     this.props.changeCurrency(target.id);
   };
+
+  setIsOpen = () => {
+    this.setState((state) => ({
+      ...state,
+      isOpen: !this.state.isOpen,
+    }));
+  };
+
+  displayCurrency = (currency) => {
+    return (
+      <div
+        key={currency.symbol}
+        id={currency.symbol}
+        className={`dropdown-element ${this.classNameIsOpen("element")}
+        ${this.classNameElementSelected(currency)}
+        `}
+      >
+        {`${currency.symbol} ${currency.label}`}
+      </div>
+    );
+  };
+
+  classNameIsOpen = (text) => {
+    if (this.state.isOpen) return `dropdown-${text}-isOpen`;
+  };
+
+  classNameElementSelected = (currency) => {
+    if (currency.symbol === this.props.currentCurrency)
+      return "dropdown-element-isOpen-selected";
+  };
+
   render() {
-    const { isOpen, currentCurrency } = this.state;
     const { currencies } = this.state;
-
-    const setIsOpen = () => {
-      this.setState((state) => ({
-        ...state,
-        isOpen: !isOpen,
-      }));
-    };
-
+    const { currentCurrency } = this.props;
     return (
       <>
         <li className="dropdown dropdown-currency-selector">
           <div
             className="dropdown-button"
-            onClick={setIsOpen}
+            onClick={this.setIsOpen}
             ref={this.dropDownButton}
           >
             <a href="#">{currentCurrency}</a>
             <img
-              className={`${isOpen && "dropdown-button-isOpen"}`}
+              className={`${this.classNameIsOpen("button")}`}
               id="arrow"
               src={arrow}
               alt="arrow"
@@ -103,27 +122,11 @@ class CurrencySelector extends Component {
 
           <div
             ref={this.dropDownMenu}
-            className={`dropdown-menu dropdown-menu-currency-selector ${
-              isOpen && "dropdown-menu-isOpen"
-            }`}
+            className={`dropdown-menu dropdown-menu-currency-selector ${this.classNameIsOpen(
+              "menu"
+            )}`}
           >
-            {currencies.map((currency) => (
-              <div
-                key={currency.symbol}
-                id={currency.symbol}
-                onClick={this.handleCurrencyChange}
-                className={`dropdown-element ${
-                  isOpen && "dropdown-element-isOpen"
-                }
-                ${
-                  currency.symbol === currentCurrency &&
-                  "dropdown-element-isOpen-selected"
-                }
-                `}
-              >
-                {`${currency.symbol} ${currency.label}`}
-              </div>
-            ))}
+            {currencies.map(this.displayCurrency)}
           </div>
         </li>
       </>
@@ -131,10 +134,16 @@ class CurrencySelector extends Component {
   }
 }
 
+const mapStateToProps = (state) => {
+  return {
+    currentCurrency: state.currency.selectedCurrency,
+  };
+};
+
 const mapDispatchToProps = () => {
   return {
     changeCurrency,
   };
 };
 
-export default connect(null, mapDispatchToProps())(CurrencySelector);
+export default connect(mapStateToProps, mapDispatchToProps())(CurrencySelector);

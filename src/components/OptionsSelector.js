@@ -1,63 +1,76 @@
 import React, { Component } from "react";
 
 export default class OptionsSelector extends Component {
-  render() {
-    const {
-      attributes,
-      className,
-      setSelectedOption,
-      selectedOptions,
-      disabled,
-    } = this.props;
-
-    return attributes.map((attribute) => {
-      return (
-        <div key={attribute.name}>
-          <h3>{`${attribute.name.toUpperCase()}:`}</h3>
-          <div
-            className={"attributes-options"}
-            onClick={(e) => setSelectedOption(e.target.name, e.target.id)}
-          >
-            {attribute.items.map((item) => {
-              const selectedOption = selectedOptions.find(
-                (selectedOption) => selectedOption.name === attribute.name
-              );
-              return (
-                <button
-                  disabled={disabled}
-                  id={item.displayValue}
-                  key={item.displayValue}
-                  className={`${
-                    attribute.type === "swatch"
-                      ? "value-type-swatch"
-                      : "value-type-text"
-                  } ${className.isSelectable}
-                    ${
-                      item.displayValue === selectedOption?.displayValue &&
-                      "selected-option"
-                    }
-                  `}
-                  style={
-                    attribute.type === "swatch"
-                      ? {
-                          backgroundColor: item.value,
-                          border:
-                            item.value === "#FFFFFF"
-                              ? "1px solid black"
-                              : "none",
-                        }
-                      : {}
-                  }
-                  alt={item.displayValue}
-                  name={attribute.name}
-                >
-                  {attribute.type === "text" && item.displayValue}
-                </button>
-              );
-            })}
-          </div>
+  renderAttribute = (attribute, i) => {
+    const { setSelectedOption } = this.props;
+    return (
+      <div className="attributes-options-container" key={attribute.name}>
+        <h3>{`${attribute.name.toUpperCase()}:`}</h3>
+        <div
+          className="attributes-options"
+          onClick={(e) => setSelectedOption(e.target.name, e.target.id, i)}
+        >
+          {attribute.items.map((item) => this.renderItem(item, attribute))}
         </div>
-      );
-    });
+      </div>
+    );
+  };
+
+  renderItem = (item, attribute) => {
+    const { selectedOptions, disabled } = this.props;
+    const selectedOption = selectedOptions.find(
+      (selectedOption) => selectedOption.name === attribute.name
+    );
+    return (
+      <button
+        disabled={disabled}
+        id={item.displayValue}
+        key={item.displayValue}
+        className={`
+          ${this.classValueType(attribute.type)} 
+          ${this.classSelectedOption(item, selectedOption)}
+          ${this.classBlackBorder(item.value)}
+        `}
+        style={this.buttonStyle(attribute, item)}
+        alt={item.displayValue}
+        name={attribute.name}
+      >
+        {attribute.type === "text" && item.displayValue}
+      </button>
+    );
+  };
+  classValueType = (type) => {
+    switch (type) {
+      case "swatch":
+        return "value-type-swatch";
+      case "text":
+        return "value-type-text";
+      default:
+    }
+  };
+  classSelectedOption = (item, selectedOption) => {
+    if (item.displayValue === selectedOption?.displayValue) {
+      return "selected-option";
+    }
+  };
+  classBlackBorder = (color) => {
+    if (color === "#FFFFFF") {
+      return "black-border";
+    }
+  };
+  buttonStyle = ({ type }, item) => {
+    switch (type) {
+      case "swatch":
+        return { backgroundColor: item.value };
+      default:
+        return {};
+    }
+  };
+
+  render() {
+    const { attributes } = this.props;
+    // attributes.map((attribute, i) => console.log(attribute, i))
+
+    return attributes.map(this.renderAttribute);
   }
 }

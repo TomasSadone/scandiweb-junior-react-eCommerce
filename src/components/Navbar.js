@@ -29,6 +29,22 @@ class Navbar extends Component {
       });
     });
   }
+
+  classIsActive = (isActive) => {
+    if(isActive) return "active"
+  }
+
+  renderCategories = (category) => {
+    return (
+      <NavLink
+        className={`btn-navbar ${({isActive}) => this.classIsActive(isActive)}`}
+        key={category.name}
+        to={`/${category.name}`}
+      >
+        {category.name.toUpperCase()}
+      </NavLink>
+    );
+  };
   render() {
     const { categories } = this.state;
     return (
@@ -36,19 +52,7 @@ class Navbar extends Component {
         <div className="container">
           <div className="navbar">
             <div className="navbar-categories-container">
-              {categories.map((category) => {
-                return (
-                  <NavLink
-                    className={({ isActive }) =>
-                      "btn-navbar " + (isActive ? "active" : "")
-                    }
-                    key={category.name}
-                    to={`/${category.name}`}
-                  >
-                    {category.name.toUpperCase()}
-                  </NavLink>
-                );
-              })}
+              {categories.map(this.renderCategories)}
             </div>
             <div>
               <img id="logo" src={logo} alt="Logo" />

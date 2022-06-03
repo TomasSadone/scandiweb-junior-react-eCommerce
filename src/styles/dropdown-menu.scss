@@ -1,6 +1,9 @@
 .dropdown {
   list-style-type: none;
   position: relative;
+  & .cart-overlay-content-box{
+    box-shadow: none;
+  }
 }
 
 .dropdown-menu {

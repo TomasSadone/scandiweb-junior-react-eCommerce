@@ -21,7 +21,7 @@ class ProductCard extends Component {
     }
   }
 
-  handleAddToCart = (e) => {
+  handleAddToCart = () => {
     if (this.props.attributes.length > 0 || !this.props.inStock) {
       return this.setState((state) => ({
         ...state,
@@ -47,13 +47,23 @@ class ProductCard extends Component {
     });
   };
 
+  addToCartError = () => {
+    if (this.state.addToCartError) {
+      return (
+        <p className="product-card-error-msg">
+          This product can not be added to cart from this page
+        </p>
+      );
+    }
+  };
+
+  handleClick = (e) => this.props.setSelectedProduct(e.target.id);
+
   render() {
-    const { name, inStock, gallery, prices, id, brand, setSelectedProduct } =
-      this.props;
-    const handleClick = (e) => setSelectedProduct(e.target.id);
+    const { name, inStock, gallery, prices, id, brand } = this.props;
 
     return (
-      <div className="product-card" id={`${id}`} onClick={handleClick}>
+      <div className="product-card" id={`${id}`} onClick={this.handleClick}>
         <div className="product-card-position-relative">
           <div
             style={{
@@ -73,18 +83,7 @@ class ProductCard extends Component {
         </div>
         <p className="product-card-name">{`${brand} ${name}`}</p>
 
-        {this.state.addToCartError && (
-          <p
-            style={{
-              fontWeight: "300",
-              fontSize: "16px",
-              marginBottom: "2px",
-              color: "red",
-            }}
-          >
-            This product can not be added to cart from this page
-          </p>
-        )}
+        {this.addToCartError()}
         <PriceDisplay prices={prices} className="product-card-price" />
       </div>
     );

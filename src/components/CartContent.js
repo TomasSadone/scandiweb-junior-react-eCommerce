@@ -1,48 +1,28 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { getData } from "../helpers/getData";
 import { removeItem, addItem, removeProduct } from "../slices/cartSlice";
 import OptionsSelector from "./OptionsSelector";
 import PriceDisplay from "./PriceDisplay";
 import leftArrow from "../icons/left-arrow.svg";
 import rightArrow from "../icons/right-arrow.svg";
+import { CartContentData } from "../helpers/cartContentData";
 
 class CartContent extends Component {
   constructor(props) {
     super(props);
+    this.nextImage = this.nextImage.bind(this);
+    this.noNextImage = this.noNextImage.bind(this);
+    this.prevImage = this.prevImage.bind(this);
+    this.noPrevImage = this.noPrevImage.bind(this);
     this.state = {
       loading: true,
+      productInfo: {},
     };
   }
 
   componentDidMount() {
     const id = this.props.productId;
-    getData(
-      `
-      query getProduct($id:String!){
-        product(id: $id){
-            name
-            gallery
-            brand
-            prices {
-              currency {
-                symbol
-              }
-              amount
-            }
-            attributes {
-              name
-              type
-              items {
-                displayValue
-                value
-              }
-            }
-          }
-      }
-      `,
-      { id }
-    ).then((data) => {
+    CartContentData(id).then((data) => {
       this.setState((state) => ({
         ...state,
         productInfo: data.product,
@@ -51,68 +31,92 @@ class CartContent extends Component {
       }));
     });
   }
+  nextImage = () => {
+    const { selectedImage, productInfo } = this.state;
+    const { gallery } = productInfo;
+    if (selectedImage === gallery.length - 1) {
+      return this.noNextImage();
+    }
+    return this.setState((state) => ({
+      ...state,
+      selectedImage: state.selectedImage + 1,
+    }));
+  };
+  noNextImage = () => {
+    this.setState((state) => ({
+      ...state,
+      selectedImage: 0,
+    }));
+  };
 
+  prevImage = () => {
+    const { selectedImage, productInfo } = this.state;
+    const { gallery } = productInfo;
+    if (selectedImage === 0) {
+      return this.noPrevImage(gallery.length - 1);
+    }
+    this.setState((state) => ({
+      ...state,
+      selectedImage: state.selectedImage - 1,
+    }));
+  };
+  noPrevImage = (n) => {
+    this.setState((state) => ({
+      ...state,
+      selectedImage: n,
+    }));
+  };
+
+  handleRemoveItem = () => {
+    const { productId, selectedOptions, quantity, removeItem, removeProduct } =
+      this.props;
+    const payload = {
+      productId,
+      selectedOptions,
+    };
+    quantity === 1 ? removeProduct(payload) : removeItem(payload);
+  };
+
+  renderNavArrows = () => {
+    if (this.state.productInfo.gallery.length > 1) {
+      return (
+        <div className={`cart-element-carousel-arrow `}>
+          <img
+            onClick={() => this.prevImage()}
+            src={leftArrow}
+            alt="left arrow"
+          />
+          <img
+            onClick={() => this.nextImage()}
+            src={rightArrow}
+            alt="right arrow"
+          />
+        </div>
+      );
+    }
+  };
+  
+  classNameCartOverlay = () => {
+    if (this.props.className === "cart-overlay") return "cart-overlay";
+  };
   render() {
     const {
       selectedOptions,
       currency,
       hr,
       addItem,
-      removeItem,
-      removeProduct,
       quantity,
       productId,
-      className,
     } = this.props;
     const { loading, productInfo, selectedImage } = this.state;
-    const { name, gallery, brand, attributes, prices } = productInfo || {};
-    const nextImage = () => {
-      if (selectedImage === gallery.length - 1) {
-        this.setState((state) => ({
-          ...state,
-          selectedImage: 0,
-        }));
-        return;
-      }
-      this.setState((state) => ({
-        ...state,
-        selectedImage: state.selectedImage + 1,
-      }));
-    };
-    const prevImage = () => {
-      if (selectedImage === 0) {
-        this.setState((state) => ({
-          ...state,
-          selectedImage: gallery.length - 1,
-        }));
-        return;
-      }
-      this.setState((state) => ({
-        ...state,
-        selectedImage: state.selectedImage - 1,
-      }));
-    };
-    const handleRemoveItem = () => {
-      const payload = {
-        productId,
-        selectedOptions: selectedOptions,
-      };
-      quantity === 1 ? removeProduct(payload) : removeItem(payload);
-    };
+    const { name, gallery, brand, attributes, prices } = productInfo;
     return (
       <>
         {loading ? (
-          <div
-            className="product-page-loader"
-            style={{ marginTop: "20px" }}
-          ></div>
+          <div className="product-page-loader p-p-l-cart-content"></div>
         ) : (
           <>
-            <div
-              className={`cart-element ${
-                className === "cart-overlay" && "cart-overlay"
-              }`}
-            >
+            <div className={`cart-element ${this.classNameCartOverlay()}`}>
               <div className={`cart-element-info `}>
                 <h1 className={`cart-element-title `}>{brand}</h1>
                 <h2 className={`cart-element-subtitle `}>{name}</h2>
@@ -122,7 +126,6 @@ class CartContent extends Component {
                   className={"cart-element-price"}
                 />
                 <OptionsSelector
-                  className={{ isSelectable: "" }}
                   attributes={attributes}
                   selectedOptions={selectedOptions}
                   disabled={true}
@@ -136,7 +139,7 @@ class CartContent extends Component {
                     onClick={() =>
                       addItem({
                         productId,
-                        selectedOptions: selectedOptions,
+                        selectedOptions,
                       })
                     }
                   >
@@ -145,7 +148,7 @@ class CartContent extends Component {
                   <p>{quantity}</p>
                   <button
                     className={`cart-element-add-substract `}
-                    onClick={handleRemoveItem}
+                    onClick={this.handleRemoveItem}
                   >
                     -
                   </button>
@@ -156,20 +159,7 @@ class CartContent extends Component {
                     alt="product"
                     className={`cart-element-image `}
                   />
-                  {gallery.length > 1 && (
-                    <div className={`cart-element-carousel-arrow `}>
-                      <img
-                        onClick={prevImage}
-                        src={leftArrow}
-                        alt="left arrow"
-                      />
-                      <img
-                        onClick={nextImage}
-                        src={rightArrow}
-                        alt="right arrow"
-                      />
-                    </div>
-                  )}
+                  {this.renderNavArrows()}
                 </div>
               </div>
             </div>

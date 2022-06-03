@@ -1,11 +1,11 @@
-#display-category{
+#display-category {
   font-weight: var(--font-weight-regular);
   font-size: 2.625rem;
 }
 #display-category:first-letter {
   text-transform: capitalize;
 }
-.product-cards-container{
+.product-cards-container {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   column-gap: 1.5rem;

@@ -16,8 +16,8 @@
 .cart-overlay-content-box {
   margin-top: 29px;
   margin-right: 30px;
-  min-width: 350px;
-  max-height: 80vh;
+  min-width: 35vw;
+  max-height: 85vh;
   position: relative;
   overflow: auto;
 }
@@ -40,7 +40,7 @@
   justify-content: space-between;
 }
 .cart-overlay-total {
-    margin-top: -10px;
+  margin-top: -10px;
   font-weight: 500;
 }
 .cart-overlay-button {
@@ -51,9 +51,7 @@
   background-color: white;
   border: 1px solid black;
   color: black;
-  box-sizing: border-box;-webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
-  -moz-box-sizing: border-box;    /* Firefox, other Gecko */
-}
-.cart-verlay-grid{
-    display: grid;
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+  -moz-box-sizing: border-box; /* Firefox, other Gecko */
 }

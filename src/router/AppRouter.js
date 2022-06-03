@@ -6,7 +6,6 @@ import Navbar from "../components/Navbar";
 import ProductList from "../components/ProductList";
 import ProductPage from "../components/ProductPage";
 
-
 class AppRouter extends Component {
   render() {
     return (
@@ -14,7 +13,10 @@ class AppRouter extends Component {
         <BrowserRouter>
           <Navbar />
           <Routes>
-            <Route path="*" element={<Navigate to={`/${this.props.category.category}`} />} />
+            <Route
+              path="*"
+              element={<Navigate to={`/${this.props.category.category}`} />}
+            />
             <Route exact path="/:category" element={<ProductList />} />
             <Route exact path="/:category/:id" element={<ProductPage />} />
             <Route exact path="/cart" element={<Cart />} />
@@ -27,9 +29,8 @@ class AppRouter extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    category: state.category
+    category: state.category,
   };
 };
-
 
 export default connect(mapStateToProps)(AppRouter);

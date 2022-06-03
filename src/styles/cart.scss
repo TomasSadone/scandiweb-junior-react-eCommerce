@@ -1,17 +1,27 @@
-.cart-container{
-    font-size: 1.5rem;
+.cart-container {
+  font-size: 1.5rem;
+  span {
+    font-weight: var(--font-weight-bold);
+  }
 }
+
+.cart-order-btn{
+  min-width: 250px;
+  margin-bottom: 10px;
+}
+
 .cart-total-flex {
   display: flex;
   align-items: center;
   gap: 4.4px;
 }
 
-.cart-tax-qty-text{
-    margin: 0;
-    &:first-child{
-        margin-bottom: 8px;
-    }
+.cart-tax-qty-text {
+  margin: 0;
+  margin-bottom: 8px;
+  // :first-child {
+  //   font-weight: 700;
+  // }
 }
 .cart-total-text {
   font-weight: var(--font-weight-medium);
