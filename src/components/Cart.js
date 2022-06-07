@@ -3,6 +3,7 @@ import CartContent from "./CartContent";
 import { connect } from "react-redux";
 import { totalPriceDisplay } from "../helpers/totalPrice";
 import { totalProductsCount } from "../helpers/totalProductsCount";
+import PropTypes from 'prop-types';
 
 class Cart extends Component {
   roundTax = (total) => {
@@ -44,6 +45,16 @@ class Cart extends Component {
     );
   }
 }
+
+ Cart.propTypes = {
+   cart: PropTypes.shape({
+     cartItems: PropTypes.array,
+     overlayOpen: PropTypes.bool
+   }),
+   currency: PropTypes.shape({
+     selectedCurrency: PropTypes.string
+   })
+ }
 
 const mapStateToProps = (state) => {
   return {

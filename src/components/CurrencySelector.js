@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { getData } from "../helpers/getData";
 import arrow from "../icons/arrow.svg";
 import { changeCurrency } from "../slices/currencySelectorSlice";
+import PropTypes from "prop-types";
 
 class CurrencySelector extends Component {
   constructor(props) {
@@ -133,6 +134,11 @@ class CurrencySelector extends Component {
     );
   }
 }
+
+CurrencySelector.propTypes = {
+  changeCurrency: PropTypes.func,
+  currentCurrency: PropTypes.string,
+};
 
 const mapStateToProps = (state) => {
   return {

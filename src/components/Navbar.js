@@ -6,6 +6,7 @@ import CurrencySelector from "./CurrencySelector";
 import { setInitialCategory } from "../slices/categorySlice";
 import { connect } from "react-redux";
 import CartOverlay from "./CartOverlay";
+import PropTypes from "prop-types";
 
 class Navbar extends Component {
   constructor() {
@@ -31,13 +32,14 @@ class Navbar extends Component {
   }
 
   classIsActive = (isActive) => {
-    if(isActive) return "active"
-  }
+    if (isActive) return "active";
+  };
 
   renderCategories = (category) => {
     return (
       <NavLink
-        className={`btn-navbar ${({isActive}) => this.classIsActive(isActive)}`}
+        className={`btn-navbar ${({ isActive }) =>
+          this.classIsActive(isActive)}`}
         key={category.name}
         to={`/${category.name}`}
       >
@@ -67,6 +69,10 @@ class Navbar extends Component {
     );
   }
 }
+
+Navbar.propTypes = {
+  setInitialCategory: PropTypes.func,
+};
 
 const mapDispatchToProps = () => {
   return {

@@ -5,6 +5,7 @@ import Cart from "../components/Cart";
 import Navbar from "../components/Navbar";
 import ProductList from "../components/ProductList";
 import ProductPage from "../components/ProductPage";
+import PropTypes from "prop-types";
 
 class AppRouter extends Component {
   render() {
@@ -25,6 +26,10 @@ class AppRouter extends Component {
       </>
     );
   }
+}
+
+AppRouter.propTypes = {
+  category: PropTypes.shape({category: PropTypes.string})
 }
 
 const mapStateToProps = (state) => {

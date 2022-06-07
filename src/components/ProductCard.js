@@ -3,6 +3,8 @@ import PriceDisplay from "./PriceDisplay";
 import shoppingCart from "../icons/white-empty-cart.svg";
 import { connect } from "react-redux";
 import { addNewProduct, addItem } from "../slices/cartSlice";
+import PropTypes from "prop-types";
+
 
 class ProductCard extends Component {
   constructor(props) {
@@ -61,7 +63,6 @@ class ProductCard extends Component {
 
   render() {
     const { name, inStock, gallery, prices, id, brand } = this.props;
-
     return (
       <div className="product-card" id={`${id}`} onClick={this.handleClick}>
         <div className="product-card-position-relative">
@@ -88,6 +89,23 @@ class ProductCard extends Component {
       </div>
     );
   }
+}
+
+ProductCard.propTypes = {
+  attributes: PropTypes.array,
+  inStock: PropTypes.bool,
+  cart: PropTypes.shape({
+    cartItems: PropTypes.array,
+    overlayOpen: PropTypes.bool
+  }),
+  id: PropTypes.string,
+  addItem: PropTypes.func,
+  addNewProduct: PropTypes.func,
+  setSelectedProduct: PropTypes.func,
+  prices: PropTypes.arrayOf(PropTypes.object),
+  gallery: PropTypes.arrayOf(PropTypes.string),
+  name: PropTypes.string,
+  brand: PropTypes.string,
 }
 
 const mapDispatchToProps = () => {

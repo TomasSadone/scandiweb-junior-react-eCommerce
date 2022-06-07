@@ -6,6 +6,7 @@ import PriceDisplay from "./PriceDisplay";
 import leftArrow from "../icons/left-arrow.svg";
 import rightArrow from "../icons/right-arrow.svg";
 import { CartContentData } from "../helpers/cartContentData";
+import PropTypes from "prop-types";
 
 class CartContent extends Component {
   constructor(props) {
@@ -95,19 +96,13 @@ class CartContent extends Component {
       );
     }
   };
-  
+
   classNameCartOverlay = () => {
     if (this.props.className === "cart-overlay") return "cart-overlay";
   };
   render() {
-    const {
-      selectedOptions,
-      currency,
-      hr,
-      addItem,
-      quantity,
-      productId,
-    } = this.props;
+    const { selectedOptions, currency, hr, addItem, quantity, productId } =
+      this.props;
     const { loading, productInfo, selectedImage } = this.state;
     const { name, gallery, brand, attributes, prices } = productInfo;
     return (
@@ -170,6 +165,21 @@ class CartContent extends Component {
     );
   }
 }
+
+CartContent.propTypes = {
+  selectedOptions: PropTypes.arrayOf(PropTypes.object),
+  currency: PropTypes.shape({
+    selectedCurrency: PropTypes.string,
+  }),
+  hr: PropTypes.bool,
+  addItem: PropTypes.func,
+  removeItem: PropTypes.func,
+  removeProduct: PropTypes.func,
+  quantity: PropTypes.number,
+  productId: PropTypes.string,
+  className: PropTypes.oneOf(['cart-overlay'])
+};
+
 const mapStateToProps = (state) => {
   return {
     currency: state.currency,

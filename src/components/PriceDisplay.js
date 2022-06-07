@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import PropTypes from "prop-types";
 
 class PriceDisplay extends Component {
   render() {
@@ -14,6 +15,15 @@ class PriceDisplay extends Component {
     );
   }
 }
+
+PriceDisplay.propTypes = {
+  currency: PropTypes.shape({
+    selectedCurrency: PropTypes.string,
+  }),
+  prices: PropTypes.arrayOf(PropTypes.object),
+  className: PropTypes.string,
+};
+
 const mapStateToProps = (state) => {
   return {
     currency: state.currency,

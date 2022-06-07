@@ -6,6 +6,7 @@ import CartContent from "./CartContent";
 import { toggleOverlay } from "../slices/cartSlice";
 import { totalPriceDisplay } from "../helpers/totalPrice";
 import routerHOC from "../helpers/routerHOC";
+import PropTypes from "prop-types";
 
 class CartOverlay extends Component {
   constructor(props) {
@@ -120,6 +121,18 @@ class CartOverlay extends Component {
   }
 }
 
+CartOverlay.propTypes = {
+  toggleOverlay: PropTypes.func,
+  navigation: PropTypes.func,
+  cart: PropTypes.shape({
+    cartItems: PropTypes.array,
+    overlayOpen: PropTypes.bool
+  }),
+  currency: PropTypes.shape({
+    selectedCurrency: PropTypes.string,
+  }),
+}
+
 const mapStateToProps = (state) => {
   return {
     cart: state.cart,
@@ -131,6 +144,7 @@ const mapDispatchToProps = () => {
     toggleOverlay,
   };
 };
+
 export default connect(
   mapStateToProps,
   mapDispatchToProps()

@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import routerHOC from "../helpers/routerHOC";
 import ProductCard from "./ProductCard";
 import { productListData } from "../helpers/productListData";
+import PropTypes from "prop-types";
 
 class ProductList extends Component {
   constructor(props) {
@@ -72,6 +73,17 @@ class ProductList extends Component {
     );
   }
 }
+
+ProductList.propTypes = {
+  params: PropTypes.shape({
+    category: PropTypes.string,
+  }),
+  navigation: PropTypes.func,
+  cart: PropTypes.shape({
+    cartItems: PropTypes.array,
+    overlayOpen: PropTypes.bool,
+  }),
+};
 
 const mapStateToProps = (state) => {
   return {

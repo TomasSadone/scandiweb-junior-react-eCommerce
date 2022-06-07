@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 
 export default class OptionsSelector extends Component {
   renderAttribute = (attribute, i) => {
@@ -69,8 +70,14 @@ export default class OptionsSelector extends Component {
 
   render() {
     const { attributes } = this.props;
-    // attributes.map((attribute, i) => console.log(attribute, i))
 
     return attributes.map(this.renderAttribute);
   }
 }
+
+OptionsSelector.propTypes = {
+  setSelectedOption: PropTypes.func,
+  selectedOptions: PropTypes.arrayOf(PropTypes.object),
+  disabled: PropTypes.bool,
+  attributes: PropTypes.arrayOf(PropTypes.object),
+};

@@ -8,6 +8,7 @@ import parse from "html-react-parser";
 import routerHOC from "../helpers/routerHOC";
 import { productListData } from "../helpers/productPageData";
 import { isArrayEqual } from "../helpers/isArrayEqual";
+import PropTypes from "prop-types";
 
 class ProductPage extends Component {
   constructor(props) {
@@ -37,7 +38,7 @@ class ProductPage extends Component {
 
   /* --  HANDLING SELECTING OPTIONS  --  */
 
-  setSelectedOption = (name, id, i) => {
+  setSelectedOption = (name, id) => {
     if (
       this.state.selectedOptions.find(
         (selectedOption) => selectedOption.name === name
@@ -164,7 +165,7 @@ class ProductPage extends Component {
         <p className="product-page-error-msg">You must select every option</p>
       );
   };
-  
+
   render() {
     const {
       addToCartError,
@@ -237,6 +238,20 @@ class ProductPage extends Component {
     );
   }
 }
+
+ProductPage.propTypes = {
+  params: PropTypes.shape({
+    category: PropTypes.string,
+    id: PropTypes.string,
+  }),
+  addItem: PropTypes.func,
+  addNewProduct: PropTypes.func,
+  cart: PropTypes.shape({
+    cartItems: PropTypes.array,
+    overlayOpen: PropTypes.bool,
+  }),
+};
+
 const mapStateToProps = (state) => {
   return {
     cart: state.cart,
