@@ -1,12 +1,12 @@
-import React, { Component } from "react";
-import { NavLink } from "react-router-dom";
-import { getData } from "../helpers/getData";
-import logo from "../icons/a-logo.svg";
-import CurrencySelector from "./CurrencySelector";
-import { setInitialCategory } from "../slices/categorySlice";
-import { connect } from "react-redux";
-import CartOverlay from "./CartOverlay";
-import PropTypes from "prop-types";
+import React, { Component } from 'react';
+import { NavLink } from 'react-router-dom';
+import { getData } from '../helpers/getData';
+import logo from '../icons/a-logo.svg';
+import CurrencySelector from './CurrencySelector';
+import { setInitialCategory } from '../slices/categorySlice';
+import { connect } from 'react-redux';
+import CartOverlay from './CartOverlay';
+import PropTypes from 'prop-types';
 
 class Navbar extends Component {
   constructor() {
@@ -32,7 +32,7 @@ class Navbar extends Component {
   }
 
   classIsActive = (isActive) => {
-    if (isActive) return "active";
+    if (isActive) return 'active';
   };
 
   renderCategories = (category) => {
@@ -51,15 +51,15 @@ class Navbar extends Component {
     const { categories } = this.state;
     return (
       <nav>
-        <div className="container">
-          <div className="navbar">
-            <div className="navbar-categories-container">
+        <div className='container'>
+          <div className='navbar'>
+            <div className='navbar-categories-container'>
               {categories.map(this.renderCategories)}
             </div>
             <div>
-              <img id="logo" src={logo} alt="Logo" />
+              <img id='logo' src={logo} alt='Logo' />
             </div>
-            <div id="divisaycarro">
+            <div id='divisaycarro'>
               <CurrencySelector />
               <CartOverlay />
             </div>

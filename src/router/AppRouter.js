@@ -1,11 +1,11 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-import Cart from "../components/Cart";
-import Navbar from "../components/Navbar";
-import ProductList from "../components/ProductList";
-import ProductPage from "../components/ProductPage";
-import PropTypes from "prop-types";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import Cart from '../components/Cart';
+import Navbar from '../components/Navbar';
+import ProductList from '../components/ProductList';
+import ProductPage from '../components/ProductPage';
+import PropTypes from 'prop-types';
 
 class AppRouter extends Component {
   render() {
@@ -15,12 +15,12 @@ class AppRouter extends Component {
           <Navbar />
           <Routes>
             <Route
-              path="*"
+              path='*'
               element={<Navigate to={`/${this.props.category.category}`} />}
             />
-            <Route exact path="/:category" element={<ProductList />} />
-            <Route exact path="/:category/:id" element={<ProductPage />} />
-            <Route exact path="/cart" element={<Cart />} />
+            <Route exact path='/:category' element={<ProductList />} />
+            <Route exact path='/:category/:id' element={<ProductPage />} />
+            <Route exact path='/cart' element={<Cart />} />
           </Routes>
         </BrowserRouter>
       </>
@@ -29,8 +29,8 @@ class AppRouter extends Component {
 }
 
 AppRouter.propTypes = {
-  category: PropTypes.shape({category: PropTypes.string})
-}
+  category: PropTypes.shape({ category: PropTypes.string }),
+};
 
 const mapStateToProps = (state) => {
   return {
