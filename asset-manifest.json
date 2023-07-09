@@ -1,19 +1,19 @@
 {
   "files": {
-    "main.css": "/scandiweb-junior-react-eCommerce/static/css/main.b3120dd3.css",
-    "main.js": "/scandiweb-junior-react-eCommerce/static/js/main.1f901903.js",
-    "static/media/a-logo.svg": "/scandiweb-junior-react-eCommerce/static/media/a-logo.5e2d5c0348a029df06ba38b7f3e6be41.svg",
-    "static/media/black-empty-cart.svg": "/scandiweb-junior-react-eCommerce/static/media/black-empty-cart.d19953670255792370f9fd25fc20f2ce.svg",
-    "static/media/white-empty-cart.svg": "/scandiweb-junior-react-eCommerce/static/media/white-empty-cart.e4a558c465712930faf9b7f5642db17e.svg",
-    "index.html": "/scandiweb-junior-react-eCommerce/index.html",
-    "static/media/right-arrow.svg": "/scandiweb-junior-react-eCommerce/static/media/right-arrow.48dabad1b06d514b8729967e0aab2f15.svg",
-    "static/media/left-arrow.svg": "/scandiweb-junior-react-eCommerce/static/media/left-arrow.1ca45c0b8b9ece68562c1f6be07fecdf.svg",
-    "static/media/arrow.svg": "/scandiweb-junior-react-eCommerce/static/media/arrow.766d7b11f183f77a1e40c47ea18dd7ee.svg",
-    "main.b3120dd3.css.map": "/scandiweb-junior-react-eCommerce/static/css/main.b3120dd3.css.map",
-    "main.1f901903.js.map": "/scandiweb-junior-react-eCommerce/static/js/main.1f901903.js.map"
+    "main.css": "/static/css/main.b3120dd3.css",
+    "main.js": "/static/js/main.6398dda8.js",
+    "static/media/a-logo.svg": "/static/media/a-logo.5e2d5c0348a029df06ba38b7f3e6be41.svg",
+    "static/media/black-empty-cart.svg": "/static/media/black-empty-cart.d19953670255792370f9fd25fc20f2ce.svg",
+    "static/media/white-empty-cart.svg": "/static/media/white-empty-cart.e4a558c465712930faf9b7f5642db17e.svg",
+    "index.html": "/index.html",
+    "static/media/right-arrow.svg": "/static/media/right-arrow.48dabad1b06d514b8729967e0aab2f15.svg",
+    "static/media/left-arrow.svg": "/static/media/left-arrow.1ca45c0b8b9ece68562c1f6be07fecdf.svg",
+    "static/media/arrow.svg": "/static/media/arrow.766d7b11f183f77a1e40c47ea18dd7ee.svg",
+    "main.b3120dd3.css.map": "/static/css/main.b3120dd3.css.map",
+    "main.6398dda8.js.map": "/static/js/main.6398dda8.js.map"
   },
   "entrypoints": [
     "static/css/main.b3120dd3.css",
-    "static/js/main.1f901903.js"
+    "static/js/main.6398dda8.js"
   ]
 }
