@@ -1,7 +1,7 @@
 export const getData = async (query, variables) => {
-  const resp = await fetch("http://localhost:4000/", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
+  const resp = await fetch('https://scandiweb-endpoint-xmpq.onrender.com', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       query: query,
       variables: variables,

@@ -15,6 +15,7 @@ const reducers = combineReducers({
   cart: cartReducer,
   category: categorySlice,
 });
+//creo que si no se usara el persist el store se configuraria solo con reducer: combineReducers.
 
 const persistedReducer = persistReducer(persistConfig, reducers);
 

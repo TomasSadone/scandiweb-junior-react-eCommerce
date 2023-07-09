@@ -16,7 +16,7 @@ export const cartSlice = createSlice({
     addItem: (state, { payload }) => {
       const item = state.cartItems.find(
         (cartItem) =>
-            isArrayEqual(cartItem.selectedOptions, payload.selectedOptions) &&
+          isArrayEqual(cartItem.selectedOptions, payload.selectedOptions) &&
           cartItem.productId === payload.productId
       );
       item.quantity = item.quantity + 1;

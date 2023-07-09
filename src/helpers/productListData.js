@@ -1,30 +1,29 @@
-import { getData } from "./getData"
+import { getData } from "./getData";
 
 export const productListData = (category) => {
-    return getData(
-        `
-          query getCategories($title:String!){
-              category(input: {title:$title}){
-                  products{
-                  name
-                  inStock
-                  gallery
-                  id
-                  brand
-                  attributes{
+  return getData(
+    `
+    query getCategories($title:String!){
+        category(input: {title:$title}){
+            products{
+                name
+                inStock
+                gallery
+                id
+                brand
+                attributes{
                     id
-                  }
-                  prices{
-                      currency{
-                          label
-                          symbol
-                      }
-                      amount
-                  }
-
-                  }
-              }
-              }`,
-        { title: `${category}` }
-    )
-}
+                }
+                prices{
+                    currency{
+                        label
+                        symbol
+                    }
+                amount
+                }
+            }
+        }
+    }`,
+    { title: `${category}` }
+  );
+};

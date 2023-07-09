@@ -10,6 +10,6 @@ export const totalPriceDisplay = (currency, cart) => {
     );
     return price.amount * item.quantity + currentTotal;
   }, 0);
-  const roundTotal = () => Math.ceil(total * 100) / 100;
+  const roundTotal = () => Math.ceil(total * 100) / 100;  
   return roundTotal();
 };
