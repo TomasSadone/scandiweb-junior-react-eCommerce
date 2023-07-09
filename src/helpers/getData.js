@@ -7,6 +7,7 @@ export const getData = async (query, variables) => {
       variables: variables,
     }),
   });
+  console.log(resp);
   const { data } = await resp.json();
   return data;
 };
